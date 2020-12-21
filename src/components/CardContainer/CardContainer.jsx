@@ -8,6 +8,7 @@ export default function CardContainer(props){
                {props.cities.map(city=>
                 <Card
                 ciudad={city}
+                onClose={props.onClose}
                 ></Card>)}
            </div>
        )

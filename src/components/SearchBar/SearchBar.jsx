@@ -6,6 +6,7 @@ export default function SearchBar(props){
         <form onSubmit={(e)=>{
             e.preventDefault();
             props.onSearch(city)
+            setCity("")
         }}>
             <input type="text" 
                     placeholder="Ciudad..."
