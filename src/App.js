@@ -7,6 +7,7 @@ import City from './components/City/City'
 
 function App() {
 const [cities, setCities]= useState([])
+const [pronostico, setPronostico]=useState({})
 
 
   function onSearch (ciudad){
@@ -21,18 +22,37 @@ const [cities, setCities]= useState([])
               id: recurso.id,
               wind: recurso.wind.speed,
               temp: recurso.main.temp,
+              humidity: recurso.main.humidity,
+              rain: recurso.rain,
               name: recurso.name,
               weather: recurso.weather[0].main,
               clouds: recurso.clouds.all,
               latitud: recurso.coord.lat,
-              longitud: recurso.coord.lon
+              longitud: recurso.coord.lon,
+              tiempo: recurso.dt
             }
             setCities(oldCities => [...oldCities, ciudad])
           } else {
             alert("Ciuadad no encontrada.")
           }
         })
+        .catch(error=>{
+          alert("Ocurrio un error: " + error)
+        })
         
+    }
+
+  
+    function onCity(ciudad){
+  
+      fetch(`https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=${ciudad.latitud}&lon=${ciudad.longitud}&dt=${ciudad.tiempo}&appid=${process.env.REACT_APP_KEY}&units=metric&lang=sp`)
+      .then(res=> res.json())
+        .then(recurso=>{
+          const datos={
+            horas: recurso
+          }
+          setPronostico(datos)
+        })
     }
 
 
@@ -41,7 +61,7 @@ const [cities, setCities]= useState([])
   }
 
   function onFilter(id){
-    let ciudades= cities.filter((city)=>city.id==parseInt(id)) 
+    let ciudades= cities.filter((city)=>city.id===parseInt(id)) 
     if(ciudades.length > 0){
       return ciudades[0]
     } else {
@@ -52,8 +72,8 @@ const [cities, setCities]= useState([])
   return (
    <div>
     <Route path="/" render={()=><Nav onSearch={onSearch}></Nav>}></Route>
-    <Route exact path="/" render={()=> <CardContainer cities={cities} onClose={onClose}></CardContainer>}></Route>
-    <Route path="/city/:id" render={({match})=> <City ciudad={onFilter(match.params.id)}></City>}></Route>
+    <Route exact path="/" render={()=> <CardContainer cities={cities} onClose={onClose} onCity={onCity}></CardContainer>}></Route>
+    <Route path="/city/:id" render={({match})=> <City ciudad={onFilter(match.params.id)} datos={pronostico}></City>}></Route>
    </div>
   );
 }

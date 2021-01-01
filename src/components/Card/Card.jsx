@@ -1,20 +1,32 @@
-import {Link} from 'react-router-dom'
+import {Link} from 'react-router-dom';
+import './Card.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTemperatureHigh, faTimes} from '@fortawesome/free-solid-svg-icons'
 
 export default function Card (props){
     return (
-        <div>
-            <button onClick={()=>props.onClose(props.ciudad.id)}>X</button>
-           <Link to={`/city/${props.ciudad.id}`} >
-            <h3>{props.ciudad.name}</h3>
-            <div>
-                {props.ciudad.temp}
+        <div className="card">
+            <div className="btncontenedor">
+                <button className="boton" onClick={()=>props.onClose(props.ciudad.id)}><FontAwesomeIcon icon={faTimes} /></button>
             </div>
-            <div>
-                <div>{props.ciudad.max}</div>
-                <div>{props.ciudad.min}</div>
+           <Link to={`/city/${props.ciudad.id}`} onClick={()=>props.onCity(props.ciudad)} className="link" >
+            <div className="title">
+                <h3 className="name">{props.ciudad.name}</h3>
             </div>
-            <div>
-                {props.ciudad.img}
+            <div className="imagen">
+                <img src={"http://openweathermap.org/img/wn/"+props.ciudad.img+"@2x.png"}/>
+            </div>
+            <div className="temperatura">
+                <div>
+                <FontAwesomeIcon className="icono" icon={faTemperatureHigh} />
+                    {Math.round(props.ciudad.temp) + "°C"}
+                </div>
+            </div>
+            <div className="maxmin">
+                <div className="max">
+                    <div className="textito" >Max</div>{props.ciudad.max + "°C"}</div>
+                <div className="min">
+                    <div className="textito">Min</div>{props.ciudad.min + "°C"}</div>
             </div>
            </Link>
             

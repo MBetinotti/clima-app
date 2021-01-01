@@ -1,0 +1,7 @@
+.nav{
+    background-color: #242526;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
