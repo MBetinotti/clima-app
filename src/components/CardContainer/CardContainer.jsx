@@ -8,9 +8,10 @@ export default function CardContainer(props){
            <div className="contenedor">
                {props.cities.map(city=>
                 <Card
+                key={city.name}
                 ciudad={city}
                 onClose={props.onClose}
-                onCity={props.onCity}
+                
                 ></Card>)}
            </div>
        )

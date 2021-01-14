@@ -7,7 +7,8 @@ import City from './components/City/City'
 
 function App() {
 const [cities, setCities]= useState([])
-const [pronostico, setPronostico]=useState({})
+const [pronostico, setPronostico]= useState({})
+
 
 
   function onSearch (ciudad){
@@ -32,6 +33,18 @@ const [pronostico, setPronostico]=useState({})
               tiempo: recurso.dt
             }
             setCities(oldCities => [...oldCities, ciudad])
+
+            fetch(`https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=${ciudad.latitud}&lon=${ciudad.longitud}&dt=${ciudad.tiempo}&appid=${process.env.REACT_APP_KEY}&units=metric&lang=sp`)
+            .then(res=> res.json())
+              .then(recurso=>{
+                const datos={
+                  horas: recurso
+                }
+                setPronostico(datos)
+              })
+              .catch(error=>{
+                alert("Ocurrio un error: " + error)
+              })
           } else {
             alert("Ciuadad no encontrada.")
           }
@@ -39,21 +52,29 @@ const [pronostico, setPronostico]=useState({})
         .catch(error=>{
           alert("Ocurrio un error: " + error)
         })
+
+         
+  
+     
+    
         
     }
 
   
-    function onCity(ciudad){
+    // function onCity(ciudad){
   
-      fetch(`https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=${ciudad.latitud}&lon=${ciudad.longitud}&dt=${ciudad.tiempo}&appid=${process.env.REACT_APP_KEY}&units=metric&lang=sp`)
-      .then(res=> res.json())
-        .then(recurso=>{
-          const datos={
-            horas: recurso
-          }
-          setPronostico(datos)
-        })
-    }
+    //   fetch(`https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=${ciudad.latitud}&lon=${ciudad.longitud}&dt=${ciudad.tiempo}&appid=${process.env.REACT_APP_KEY}&units=metric&lang=sp`)
+    //   .then(res=> res.json())
+    //     .then(recurso=>{
+    //       const datos={
+    //         horas: recurso
+    //       }
+    //       setPronostico(datos)
+    //     })
+    //     .catch(error=>{
+    //       alert("Ocurrio un error: " + error)
+    //     })
+    // }
 
 
   function onClose(id){
@@ -72,8 +93,8 @@ const [pronostico, setPronostico]=useState({})
   return (
    <div>
     <Route path="/" render={()=><Nav onSearch={onSearch}></Nav>}></Route>
-    <Route exact path="/" render={()=> <CardContainer cities={cities} onClose={onClose} onCity={onCity}></CardContainer>}></Route>
-    <Route path="/city/:id" render={({match})=> <City ciudad={onFilter(match.params.id)} datos={pronostico}></City>}></Route>
+    <Route exact path="/" render={()=> <CardContainer cities={cities} onClose={onClose} ></CardContainer>}></Route>
+    <Route path="/city/:id" render={({match})=> <City ciudad={onFilter(match.params.id)} pronostico={pronostico}></City>}></Route>
    </div>
   );
 }

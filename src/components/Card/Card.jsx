@@ -9,12 +9,12 @@ export default function Card (props){
             <div className="btncontenedor">
                 <button className="boton" onClick={()=>props.onClose(props.ciudad.id)}><FontAwesomeIcon icon={faTimes} /></button>
             </div>
-           <Link to={`/city/${props.ciudad.id}`} onClick={()=>props.onCity(props.ciudad)} className="link" >
+           <Link to={`/city/${props.ciudad.id}`}  className="link" >
             <div className="title">
                 <h3 className="name">{props.ciudad.name}</h3>
             </div>
             <div className="imagen">
-                <img src={"http://openweathermap.org/img/wn/"+props.ciudad.img+"@2x.png"}/>
+                <img src={"http://openweathermap.org/img/wn/"+props.ciudad.img+"@2x.png"} alt="tiempo"/>
             </div>
             <div className="temperatura">
                 <div>
